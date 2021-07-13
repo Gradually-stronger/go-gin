@@ -56,9 +56,9 @@ hook_max_buffer = 512
 
 # minio存储
 [minio]
-addr = "39.99.234.158:9000"
-assess_key = "15064622247"
-secret_key = "zhb19970504"
+addr = "127.0.0.1:9000"
+assess_key = "123456"
+secret_key = "123456"
 
 # gorm配置
 [gorm]
@@ -80,13 +80,13 @@ auto_migrate = false
 # mysql数据库配置
 [mysql]
 # 连接地址
-host = "39.99.234.158"
+host = "127.0.0.1"
 # 连接端口
-port= 3336
+port= 3306
 # 用户名
 user = "root"
 # 密码
-password = "zhb19970504"
+password = "123456"
 # 数据库
 db_name = "pravite"
 # 连接参数
