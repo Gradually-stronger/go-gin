@@ -1,8 +1,8 @@
 package web
 
 import (
-	"go-gin/internal/app/routers/web/ctl"
 	"github.com/gin-gonic/gin"
+	"go-gin/internal/app/routers/web/ctl"
 	"go.uber.org/dig"
 )
 

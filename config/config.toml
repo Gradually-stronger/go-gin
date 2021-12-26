@@ -56,9 +56,9 @@ hook_max_buffer = 512
 
 # minio存储
 [minio]
-addr = "127.0.0.1:9000"
-assess_key = "123456"
-secret_key = "123456"
+addr = "39.99.234.158:9000"
+assess_key = "15064622247"
+secret_key = "zhb19970504"
 
 # gorm配置
 [gorm]
@@ -86,9 +86,9 @@ port= 3306
 # 用户名
 user = "root"
 # 密码
-password = "123456"
+password = "zhb19970504"
 # 数据库
-db_name = "pravite"
+db_name = "private"
 # 连接参数
 parameters = "charset=utf8mb4&parseTime=True&loc=Local&allowNativePasswords=true"
 
