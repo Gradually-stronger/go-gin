@@ -9,7 +9,6 @@ type (
 	transCtx   struct{}
 	userIDCtx  struct{}
 	traceIDCtx struct{}
-	menuIDCtx  struct{}
 )
 
 // NewTrans 创建事务的上下文
@@ -31,22 +30,6 @@ func NewUserID(ctx context.Context, userID string) context.Context {
 // FromUserID 从上下文中获取用户ID
 func FromUserID(ctx context.Context) (string, bool) {
 	v := ctx.Value(userIDCtx{})
-	if v != nil {
-		if s, ok := v.(string); ok {
-			return s, s != ""
-		}
-	}
-	return "", false
-}
-
-// NewMenuID 创建菜单ID的上下文
-func NewMenuID(ctx context.Context, menuID string) context.Context {
-	return context.WithValue(ctx, menuIDCtx{}, menuID)
-}
-
-// FromMenuID 从上下文中获取菜单ID
-func FromMenuID(ctx context.Context) (string, bool) {
-	v := ctx.Value(menuIDCtx{})
 	if v != nil {
 		if s, ok := v.(string); ok {
 			return s, s != ""

@@ -16,13 +16,15 @@ store = "gorm"
 # 是否允许初始化菜单数据(检查当前数据库中是否存在菜单数据，如果不存在则执行数据初始化)
 allow_init_menu = false
 
+# 是否启用casbin鉴权
+enable_casbin = false
 
 # http配置
 [http]
 # http监听地址
-host = "0.0.0.0"
+host = "localhost"
 # http监听端口
-port = 8888
+port = 10088
 # http优雅关闭等待超时时长(单位秒)
 shutdown_timeout = 30
 
@@ -58,7 +60,7 @@ hook_max_buffer = 512
 [minio]
 addr = "39.99.234.158:9000"
 assess_key = "15064622247"
-secret_key = "zhb19970504"
+secret_key = "3f17e85d73feb1e33b408e5e9ab7cffb"
 
 # gorm配置
 [gorm]
@@ -88,7 +90,7 @@ user = "root"
 # 密码
 password = "zhb19970504"
 # 数据库
-db_name = "private"
+db_name = "interview"
 # 连接参数
 parameters = "charset=utf8mb4&parseTime=True&loc=Local&allowNativePasswords=true"
 
@@ -96,6 +98,30 @@ parameters = "charset=utf8mb4&parseTime=True&loc=Local&allowNativePasswords=true
 [sqlite3]
 # 数据库路径
 path = "data/ginadmin.db"
+
+# 图形验证码
+[captcha]
+# 存储方式(支持：memory/redis)
+store = "memory"
+# 数字长度
+length = 4
+# 图片宽度
+width = 360
+# 图片高度
+height = 120
+# redis数据库(如果存储方式是redis，则指定存储的数据库)
+redis_db = 10
+# 存储到redis数据库中的键名前缀
+redis_prefix = "captcha_"
+
+# redis配置
+[redis]
+# 地址
+addr = "127.0.0.1:6379"
+# 密码
+password = ""
+#指定数据库
+db = 9
 
 # 请求频率限制(如果redis可用则使用redis，否则使用内存存储)
 [rate_limiter]
@@ -105,6 +131,25 @@ enable = false
 count = 300
 # redis数据库(如果存储方式是redis，则指定存储的数据库)
 redis_db = 10
+
+# 用户认证(jwt)
+[jwt_auth]
+# 签名方式(支持：HS512/HS384/HS512)
+signing_method = "HS512"
+# 签名key
+signing_key = "GINADMIN"
+# 过期时间（单位秒）
+expired = 7200
+# 存储(支持：file/redis)
+store = "file"
+# 文件路径
+file_path = "data/jwt_auth.db"
+# redis数据库(如果存储方式是redis，则指定存储的数据库)
+redis_db = 10
+# 存储到redis数据库中的键名前缀
+redis_prefix = "auth_"
+# 三方Key
+third_key = "A690DA8618B76BAE3B4EDCFFD715C2E6A690DA8618B76BAE3B4EDCFFD715C2E6"
 
 # 跨域请求
 [cors]
@@ -137,5 +182,13 @@ size_limit = 64
 # 允许的桶列表
 buckets = ["assets"]
 
+# root用户
+[root]
+# 登录用户名
+user_name = "root"
+# 登录密码
+password = "Abc@123!"
+# 显示的真实姓名
+real_name = "超级管理员"
 
 

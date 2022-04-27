@@ -45,10 +45,6 @@ func NewContext(c *gin.Context) context.Context {
 		parent = logger.NewUserIDContext(parent, v)
 	}
 
-	if v := GetMenuID(c); v != "" {
-		parent = icontext.NewMenuID(parent, v)
-	}
-
 	return parent
 }
 

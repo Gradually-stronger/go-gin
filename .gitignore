@@ -21,3 +21,4 @@
 *.git
 services/server
 /vendor
+config.dev.toml

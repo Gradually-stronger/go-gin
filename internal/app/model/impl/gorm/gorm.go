@@ -18,6 +18,7 @@ func SetTablePrefix(prefix string) {
 func AutoMigrate(db *gormplus.DB) error {
 	return db.AutoMigrate(
 		new(entity.Demo),
+		new(entity.User),
 	).Error
 }
 
@@ -30,5 +31,6 @@ func AutoMigrate(db *gormplus.DB) error {
 func Inject(container *dig.Container) error {
 	container.Provide(imodel.NewTrans, dig.As(new(model.ITrans)))
 	container.Provide(imodel.NewDemo, dig.As(new(model.IDemo)))
+	container.Provide(imodel.NewUser, dig.As(new(model.IUser)))
 	return nil
 }

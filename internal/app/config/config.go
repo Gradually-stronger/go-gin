@@ -38,6 +38,13 @@ func ParseConfig(fpath string) (*Config, error) {
 	return &c, nil
 }
 
+// Redis redis配置参数
+type Redis struct {
+	Addr     string `toml:"addr"`
+	Password string `toml:"password"`
+	DB       int    `toml:"db"`
+}
+
 // Config 配置参数
 type Config struct {
 	RunMode         string      `toml:"run_mode"`
@@ -158,12 +165,6 @@ type CORS struct {
 	AllowHeaders     []string `toml:"allow_headers"`
 	AllowCredentials bool     `toml:"allow_credentials"`
 	MaxAge           int      `toml:"max_age"`
-}
-
-// Redis redis配置参数
-type Redis struct {
-	Addr     string `toml:"addr"`
-	Password string `toml:"password"`
 }
 
 // Gorm gorm配置参数

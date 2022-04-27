@@ -4,15 +4,16 @@ import (
 	"context"
 	_ "go-gin/internal/app/bll"
 	_ "go-gin/internal/app/schema"
+	"go-gin/pkg/auth"
+	"go-gin/pkg/redis"
 	"os"
 
+	"github.com/LyricTian/fuh"
+	"github.com/casbin/casbin"
 	"go-gin/internal/app/bll/impl"
 	"go-gin/internal/app/config"
 	"go-gin/pkg/logger"
 	"go-gin/pkg/minio"
-
-	"github.com/LyricTian/fuh"
-	"github.com/casbin/casbin"
 	"go.uber.org/dig"
 )
 
@@ -68,6 +69,16 @@ func handleError(err error) {
 	}
 }
 
+// InitRedis 初始化redis
+func InitRedis(ctx context.Context) func() {
+	cfg := config.GetGlobalConfig().Redis
+	redis.Init(ctx, cfg.Addr, cfg.Password, cfg.DB)
+
+	return func() {
+		redis.GetClient().Close()
+	}
+}
+
 // Init 应用初始化
 func Init(ctx context.Context, opts ...Option) func() {
 	var o options
@@ -90,7 +101,8 @@ func Init(ctx context.Context, opts ...Option) func() {
 	if v := o.SwaggerDir; v != "" {
 		cfg.Swagger = v
 	}
-
+	// 初始化redis
+	redisCall := InitRedis(ctx)
 	loggerCall, err := InitLogger()
 	handleError(err)
 
@@ -102,12 +114,10 @@ func Init(ctx context.Context, opts ...Option) func() {
 	// 创建依赖注入容器
 	container, containerCall := BuildContainer()
 
-	//// 初始化数据
-	//err = InitData(ctx, container)
-	//handleError(err)
-
 	// 初始化文件服务
 	InitMinio()
+
+	InitCaptcha()
 
 	// 初始化HTTP服务
 	httpCall := InitHTTPServer(ctx, container)
@@ -121,6 +131,9 @@ func Init(ctx context.Context, opts ...Option) func() {
 		}
 		if loggerCall != nil {
 			loggerCall()
+		}
+		if redisCall != nil {
+			redisCall()
 		}
 	}
 }
@@ -150,14 +163,14 @@ func BuildContainer() (*dig.Container, func()) {
 	container := dig.New()
 
 	// 注入casbin
-	//container.Provide(NewEnforcer)
+	container.Provide(NewEnforcer)
 
 	// 注入认证模块
-	//auther, err := InitAuth()
-	//handleError(err)
-	//container.Provide(func() auth.Auther {
-	//	return auther
-	//})
+	auther, err := InitAuth()
+	handleError(err)
+	container.Provide(func() auth.Auther {
+		return auther
+	})
 
 	// 注入存储模块
 	storeCall, err := InitStore(container)
@@ -168,9 +181,9 @@ func BuildContainer() (*dig.Container, func()) {
 	handleError(err)
 
 	return container, func() {
-		//if auther != nil {
-		//	auther.Release()
-		//}
+		if auther != nil {
+			auther.Release()
+		}
 		if storeCall != nil {
 			storeCall()
 		}

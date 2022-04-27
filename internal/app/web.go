@@ -25,7 +25,7 @@ func InitWeb(container *dig.Container) *gin.Engine {
 	app.NoRoute(middleware.NoRouteHandler())
 
 	uploadPrefix := fmt.Sprintf("/%s/", cfg.Upload.Prefix)
-	apiPrefixes := []string{"/api/", uploadPrefix}
+	apiPrefixes := []string{"/web/", uploadPrefix}
 
 	// 跟踪ID
 	app.Use(middleware.TraceMiddleware())
